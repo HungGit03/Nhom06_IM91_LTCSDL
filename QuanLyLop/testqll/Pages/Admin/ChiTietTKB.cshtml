@@ -1,0 +1,97 @@
+﻿@page
+@using QLL.DTO
+@using System.Text.Json
+@Html.AntiForgeryToken()
+@model QuanLyLop.Pages.ChiTietTKBModel;
+@using Microsoft.AspNetCore.Antiforgery
+@inject IAntiforgery antiforgery
+@{
+    var token = antiforgery.GetAndStoreTokens(HttpContext).RequestToken;
+}
+<script type="text/javascript">
+    var dataTKBCT = @Html.Raw(JsonSerializer.Serialize(Model.lst));
+</script>
+<div class="text-center">
+    <h1 class="display-4">Lớp</h1>
+    <p>Chi tiết thời khoá biểu.</p>
+    <button type="button" onclick="openModalTKBCT(null, null, null);" class="btn btn-outline-primary btn-sm">Thêm tiết học</button>
+    <table id="tableTKBCT" class="table table-striped">
+        <tr>
+            <th>Mã thời khoá biểu</th>
+            <th>Thứ</th>
+            <th>Tiết</th>
+            <th>Lớp</th>
+            <th>Môn</th>
+            <th>Giáo viên</th>
+            <th>Action</th>
+        </tr>
+        @foreach (TKBCTDTO tkb in Model.lst)
+        {
+            <tr id="@String.Format("trTKBCT_{0}_{1}_{2}", @tkb.Malop, @tkb.Thu, @tkb.Tiet)">
+                <td>@tkb.MaTkb</td>
+                <td>@tkb.Thu</td>
+                <td>@tkb.Tiet</td>
+                <td>@tkb.Malop</td>
+                <td>@tkb.MaMh</td>
+                <td>@tkb.MaGv</td>
+                <td>
+                    <button type="button" onclick="openModalTKBCT(@tkb.Malop, @tkb.Thu, @tkb.Tiet);" class="btn btn-outline-primary btn-sm">Sửa</button>
+                    <button type="button" onclick="deleteTKBCT(@tkb.Malop, @tkb.Thu, @tkb.Tiet);" class="btn btn-outline-danger btn-sm">xoá</button>
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+<div id="DivModalTKBCT" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Sửa thời khoá biếu:
+                    <span id="MaLop"></span>
+                    <span id="Thu"></span>
+                    <span id="Tiet"></span>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" onclick="closeModal()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="txtMaTKB">Mã thời khoá biểu</label>
+                    <input type="text" class="form-control" id="txtMaTKB" aria-describedby="TKBHelp" placeholder="Nhập mã thời khoá biểu">
+                    <small id="TKBHelp" class="form-text text-muted">Không được bỏ trống.</small>
+                </div>
+                <div class="form-group">
+                    <label for="txtMaLop">Mã lớp</label>
+                    <input type="text" class="form-control" id="txtMaLop" aria-describedby="MaLopHelp" placeholder="Nhập mã lớp">
+                    <small id="TDNHelp" class="form-text text-muted">Không được bỏ trống.</small>
+                </div>
+                <div class="form-group">
+                    <label for="txtThu">Thứ</label>
+                    <input type="text" class="form-control" id="txtThu" aria-describedby="ThuHelp" placeholder="Nhập số">
+                    <small id="ThuHelp" class="form-text text-muted">Chỉ nhập số.</small>
+                </div>
+                <div class="form-group">
+                    <label for="txtTiet">Tiết</label>
+                    <input type="text" class="form-control" id="txtTiet" aria-describedby="TietHelp" placeholder="Nhập số">
+                    <small id="TietHelp" class="form-text text-muted">Chỉ nhập số.</small>
+                </div>
+                <div class="form-group">
+                    <label for="txtMH">Mã môn học</label>
+                    <input type="text" class="form-control" id="txtMH" aria-describedby="MHHelp" placeholder="Nhập mã môn học">
+                    <small id="MHHelp" class="form-text text-muted">Không được bỏ trống.</small>
+                </div>
+                <div class="form-group">
+                    <label for="txtGV">Mã giáo viên</label>
+                    <input type="text" class="form-control" id="txtGV" aria-describedby="GVHelp" placeholder="Nhập mã giáo viên">
+                    <small id="GVHelp" class="form-text text-muted">Không được bỏ trống.</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal()" data-dismiss="modal">Close</button>
+                <button type="button" onclick="saveTKBCT()" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
