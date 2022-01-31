@@ -1,0 +1,71 @@
+﻿@page
+@using QLL.DTO
+@model QuanLyLop.Pages.HomeAdminModel
+@{
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+<div class="header">
+    <div class="item">
+        <a href="#">
+            <div class="icon-item">
+                <i class="fas fa-user-graduate"></i>
+            </div>
+            <div class="title">
+                <h5>Học sinh</h5>
+                <strong>@Model.totalHS</strong>
+            </div>
+        </a>
+    </div>
+    <div class="item">
+        <a>
+            <div class="icon-item">
+                <i class="fas fa-chalkboard-teacher"></i>
+            </div>
+            <div class="title">
+                <h5>Giáo viên</h5>
+                <strong>@Model.totalGV</strong>
+            </div>
+        </a>
+    </div>
+    <div class="item">
+        <a>
+            <div class="icon-item">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="title">
+                <h5>Tài khoản</h5>
+                <strong>@Model.totalTK</strong>
+            </div>
+        </a>
+    </div>
+    <div class="item">
+        <a>
+            <div class="icon-item">
+                <i class="fas fa-school"></i>
+            </div>
+            <div class="title">
+                <h5>Lớp</h5>
+                <strong>@Model.totalL</strong>
+            </div>
+        </a>
+    </div>
+</div>
+<label class="form-control">Dách sách lớp</label>
+<div class="class-items">
+    @foreach (LopDTO l in Model.lstLop)
+    {
+        <div class="card a">
+            <a asp-area="" asp-page="/InFo_Lop" asp-route-maLop="@l.MaLop">
+                <img class="card-img-top" src="~/images/1.jpg" alt="Card image cap">
+                <div class="card-body">
+                    <span style="color: #6c757d">@l.MoTa</span>
+                    <p class="card-text">[@l.MaLop] @l.TenLop ...</p>
+                </div>
+            </a>
+        </div>
+    }
+</div>

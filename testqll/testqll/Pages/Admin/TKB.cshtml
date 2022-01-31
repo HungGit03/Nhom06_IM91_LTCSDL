@@ -1,0 +1,71 @@
+﻿@page
+@using QLL.DTO
+@using System.Text.Json
+@Html.AntiForgeryToken()
+@model QuanLyLop2_ASP.NETCore.Pages.TKBModel
+@using Microsoft.AspNetCore.Antiforgery
+@inject IAntiforgery antiforgery
+@{
+   var token = antiforgery.GetAndStoreTokens(HttpContext).RequestToken;
+}
+<script type="text/javascript">
+    var dataTKB = @Html.Raw(JsonSerializer.Serialize(Model.lstTKB));
+</script>
+<div class="text-center">
+    <h1 class="display-4">Lớp</h1>
+    <p>Danh sách thời khoá biểu.</p>
+    <button type="button" onclick="openModalTKB(null);" class="btn btn-outline-primary btn-sm">Thêm thời khoá biểu</button>
+    <table id="tableTKB"class="table table-striped">
+        <tr>
+            <th>Mã thời khoá biểu</th>
+            <th>Mã khoá học</th>
+            <th>Action</th>
+        </tr>
+        @foreach (TKBDTO tkb  in Model.lstTKB)
+        {
+            <tr id="trTKB_@tkb.MaTkb">
+                <td>@tkb.MaTkb</td>
+                <td>@tkb.MaKh</td>
+                <td>
+                    <button type="button" onclick="openModalTKB(@tkb.MaTkb);" class="btn btn-outline-primary btn-sm">Sửa</button>
+                    <button type="button" class="btn-ct btn">
+                        <a class="nav-link chitiet btn-outline-primary" asp-area="" asp-page="/ChiTietTKB">chi tiết</a>
+                    </button>
+                    <button type="button" onclick="deleteTKB(@tkb.MaTkb);" class="btn btn-outline-danger btn-sm">xoá</button>
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+<div id ="DivModalTKB" class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Sửa thời khoá biểu: <span id="MaTKB"></span></h5>
+        <button type="button" class="close" data-dismiss="modal" onclick="closeModal()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+            <label for="txtMaTKB">Mã thời khoá biểu</label>
+            <input type="text" class="form-control" id="txtMaTKB" aria-describedby="MaTKBHelp" placeholder="Mã tài khoản">
+            <small id="MaTKBHelp" class="form-text text-muted">Không được bỏ trống.</small>
+        </div>
+        <div class="form-group">
+            <label for="selMaKH">Mã khoá học</label>
+            <select class="form-control" id="selMaKH">
+                @foreach(KhoaHocDTO kh in Model.LstKH)
+                {
+                    <option>@kh.MaKh</option>
+                }
+            </select>
+        </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeModal()" data-dismiss="modal">Close</button>
+        <button type="button" onclick="saveTKB()" class="btn btn-primary">Save changes</button>
+      </div>
+      </div>
+    </div>
+   </div>
+</div>
